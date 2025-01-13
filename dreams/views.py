@@ -74,3 +74,20 @@ class ListUserDreamsView(APIView):
 
         # 꿈 리스트 반환
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class DreamDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, dream_id):
+        try:
+            dream = Dreams.objects.get(id=dream_id, user_id=request.user.id)
+            serializer = DreamSerializer(dream)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        except Dreams.DoesNotExist:
+            return Response(
+                {"error": "해당 꿈을 찾을 수 없습니다."},
+                status=status.HTTP_404_NOT_FOUND
+            )
