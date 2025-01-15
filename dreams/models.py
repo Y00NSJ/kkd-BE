@@ -5,7 +5,7 @@ from accounts.models import CustomUser
 
 # Create your models here.
 class Dreams(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=255, blank=True, default="Untitled Dream")
     content = models.TextField()
     user_id = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     video = models.FileField(upload_to="videos/")

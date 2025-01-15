@@ -74,7 +74,9 @@ class FriendListView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        friends = Friends.objects.filter(models.Q(user1=request.user) | models.Q(user2=request.user))
+        friends = Friends.objects.filter(
+            models.Q(user1_id=request.user) | models.Q(user2_id=request.user)
+        )
         serializer = FriendListSerializer(friends, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 

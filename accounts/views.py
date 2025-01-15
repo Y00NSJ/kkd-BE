@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.shortcuts import render
+from rest_framework.permissions import AllowAny
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -12,14 +12,17 @@ from accounts.serializers import CustomUserSerializer
 
 User = get_user_model()
 
+from rest_framework.permissions import AllowAny
+
 class RegisterView(APIView):
+    permission_classes = [AllowAny]  # 인증 없이 접근 가능
+
     def post(self, request):
         serializer = CustomUserSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response({"message": "회원가입 완료"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class LogoutView(APIView):
     def post(self, request):

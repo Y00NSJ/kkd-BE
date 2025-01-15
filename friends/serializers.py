@@ -9,7 +9,9 @@ class FriendRequestSerializer(serializers.ModelSerializer):
         model = FriendsRequests
         fields = ['id', 'request_id', 'receive_id', 'status', 'created_at', 'updated_at']
         read_only_fields = ['id', 'created_at', 'updated_at']
-
+    def get_request_user_name(self, obj):
+        # 요청한 친구의 이름 반환
+        return obj.request_id.username
 
 class FriendsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -28,11 +30,11 @@ class FriendListSerializer(serializers.ModelSerializer):
 
     def get_friend_id(self, obj):
         request_user = self.context['request'].user
-        return obj.user1.id if obj.user2 == request_user else obj.user2.id
+        return obj.user1_id.id if obj.user2_id == request_user else obj.user2_id.id
 
     def get_friend_name(self, obj):
         request_user = self.context['request'].user
-        return obj.user1.username if obj.user2 == request_user else obj.user2.username
+        return obj.user1_id.username if obj.user2_id == request_user else obj.user2_id.username
 
 
 class DeleteFriendSerializer(serializers.ModelSerializer):
